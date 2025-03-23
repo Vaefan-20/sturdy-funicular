@@ -1,0 +1,53 @@
+#include <REGX52.H>
+#include "Delay.h"
+#include "LCD1602.h"
+#include "MatrixKey.h"
+
+unsigned char KeyNum;
+unsigned int Password,Count;
+
+void main()
+{
+		LCD_Init();
+		LCD_ShowString(1,1,"Password:");
+		while(1)
+		{
+				KeyNum=MatrixKey();
+				if(KeyNum)
+				{
+						if(KeyNum<=10)		//è?1?ê?s1~s10°′?ü°′??￡?ê?è??ü??
+						{
+							if(Count<4)			//è?1?ê?è?′?êyD?óú6
+							{
+									Password*=10;						//?ü??×óò?ò???
+									Password+=KeyNum%10;		//??è?ò????ü??
+									Count++;			//??′??óò?
+							}
+							LCD_ShowNum(2,1,Password,4);//?üD???ê?
+						}
+						if(KeyNum==11)								//è?1?s11°′?ü°′??￡?è·è?
+						{
+								if(Password==6666)				//è?1??ü??μèóú?yè·?ü??
+								{
+										LCD_ShowString(1,14,"OK ");	//??ê?OK	
+										Password=0;									//?ü????á?
+										Count=0;										//??′???á?
+										LCD_ShowNum(2,1,Password,4);//?üD???ê?
+								}
+								else														//·??ò
+								{
+										LCD_ShowString(1,14,"ERR");	//??ê?ERR
+										Password=0;									//?ü????á?
+										Count=0;										//??′???á?
+										LCD_ShowNum(2,1,Password,4);//?üD???ê?
+								}
+						}
+						if(KeyNum==12)					//è?1?s12°′?ü°′??￡?è???
+						{
+										Password=0;									//?ü????á?
+										Count=0;										//??′???á?
+										LCD_ShowNum(2,1,Password,4);//?üD???ê?
+						}
+				}
+		}
+}
